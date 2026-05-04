@@ -299,6 +299,15 @@ function closeLb() {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+document.querySelectorAll('.cell-img').forEach(el => {
+  const bg = el.style.backgroundImage;
+  if (!bg) return;
+  const url = bg.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
+  const img = new Image();
+  img.src = url;
+});
+  
 </script>
 </body>
 </html>
