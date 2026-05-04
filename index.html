@@ -161,10 +161,19 @@ footer {
 @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
 @media (max-width: 640px) {
+  #cursor { display: none; }
   .grid { grid-template-columns: repeat(2,1fr); padding-top: 4.5rem; }
   .cell.wide { grid-column: span 1; }
-  .cell.tall::after { min-height: 360px; }
+  .cell.tall { grid-row: span 1; }
+  .cell.tall::after { min-height: unset; padding-bottom: 72%; height: auto; }
   header, footer { padding: 1.1rem 1.25rem; }
+  .cell:nth-child(1) { order: 1; }
+  .cell:nth-child(2) { order: 3; }
+  .cell:nth-child(3) { order: 2; }
+  .cell:nth-child(4) { order: 5; }
+  .cell:nth-child(5) { order: 4; }
+  .cell:nth-child(6) { order: 7; }
+  .cell:nth-child(7) { order: 6; }
 }
 </style>
 </head>
