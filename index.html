@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hornman Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --bg: #0e0d0b; --fg: #f0ede8; --dim: #555450; --accent: #f0ede8; }
+html, body { height: 100%; background: var(--bg); }
+body { color: var(--fg); font-family: Helvetica, Arial, sans-serif; font-weight: 300; overflow-x: hidden; }
+
+/* cursor */
+#cursor {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--fg); position: fixed; pointer-events: none;
+  z-index: 9999; transform: translate(-50%,-50%);
+  transition: transform 0.1s, width 0.3s cubic-bezier(0.25,0,0,1), height 0.3s cubic-bezier(0.25,0,0,1), background 0.3s;
+  mix-blend-mode: difference;
+}
+body.hovering #cursor { width: 48px; height: 48px; }
+
+/* header */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.75rem 2.5rem;
+  mix-blend-mode: difference;
+}
+.wordmark {
+  font-family: 'EB Garamond', serif; font-size: 1rem; letter-spacing: 0.04em;
+  color: var(--fg); text-decoration: none;
+  opacity: 0; animation: fadeIn 1s 0.3s ease forwards;
+}
+.nav { display: flex; gap: 2.25rem; list-style: none; }
+.nav a {
+  font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--fg); text-decoration: none; opacity: 0.45;
+  transition: opacity 0.2s; cursor: none;
+}
+.nav a:hover, .nav a.active { opacity: 1; }
+.nav li { opacity: 0; animation: fadeIn 0.8s ease forwards; }
+.nav li:nth-child(1) { animation-delay: 0.5s; }
+.nav li:nth-child(2) { animation-delay: 0.65s; }
+.nav li:nth-child(3) { animation-delay: 0.8s; }
+
+/* grid */
+.grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 3px; padding-top: 5.5rem; padding-bottom: 3px;
+  min-height: 100vh;
+}
+
+
+
+.cell {
+  position: relative; overflow: hidden;
+  background: #1a1917; cursor: none;
+}
+.cell::after { content: ''; display: block; padding-bottom: 72%; }
+.cell.tall { grid-row: span 2; }
+.cell.tall::after { padding-bottom: 0; min-height: 380px; height: 100%; }
+.cell.wide { grid-column: span 2; }
+
+.cell-img {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transform: scale(1.06);
+  filter: brightness(0.7);
+  transition: transform 0.9s cubic-bezier(0.25,0,0,1), filter 0.5s ease;
+}
+.cell.visible .cell-img { transform: scale(1); }
+.cell:hover .cell-img { filter: brightness(0.55); transform: scale(1.03); }
+
+.cell-img.empty::after {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    -45deg, #1e1d1a 0px, #1e1d1a 1px, transparent 1px, transparent 8px
+  );
+}
+
+/* reveal overlay */
+.cell-cover {
+  position: absolute; inset: 0; background: var(--bg);
+  transform-origin: bottom;
+  transition: transform 0.9s cubic-bezier(0.77,0,0.18,1);
+  z-index: 2;
+}
+.cell.visible .cell-cover { transform: scaleY(0); }
+
+/* label */
+.cell-label {
+  position: absolute; bottom: 1.1rem; left: 1.2rem; z-index: 3;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.cell:hover .cell-label { opacity: 1; transform: translateY(0); }
+.cell-label span {
+  font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(240,237,232,0.6);
+}
+
+/* index number */
+.cell-num {
+  position: absolute; top: 1rem; right: 1.1rem; z-index: 3;
+  font-family: 'EB Garamond', serif; font-size: 0.75rem;
+  color: rgba(240,237,232,0.2);
+  opacity: 0; transition: opacity 0.3s;
+}
+.cell:hover .cell-num { opacity: 1; }
+
+/* footer */
+footer {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.25rem 2.5rem;
+  mix-blend-mode: difference;
+  opacity: 0; animation: fadeIn 1s 1s ease forwards;
+}
+.footer-dim { font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(240,237,232,0.35); }
+.contact-link {
+  font-family: 'EB Garamond', serif; font-size: 0.85rem;
+  color: var(--fg); text-decoration: none; cursor: none;
+  position: relative;
+}
+.contact-link::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+  height: 1px; background: var(--fg);
+  transform: scaleX(0); transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.77,0,0.18,1);
+}
+.contact-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+/* lightbox */
+#lb {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(14,13,11,0); align-items: center; justify-content: center;
+  transition: background 0.4s ease; cursor: none;
+}
+#lb.open { display: flex; background: rgba(14,13,11,0.97); }
+#lb-img {
+  max-width: 82vw; max-height: 82vh; object-fit: contain;
+  opacity: 0; transform: scale(0.96);
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.25,0,0,1);
+}
+#lb.ready #lb-img { opacity: 1; transform: scale(1); }
+#lb-close {
+  position: absolute; top: 2rem; right: 2.5rem; font-size: 0.55rem;
+  letter-spacing: 0.15em; text-transform: uppercase; color: rgba(240,237,232,0.3);
+  cursor: none; transition: color 0.2s;
+}
+#lb-close:hover { color: rgba(240,237,232,0.8); }
+
+/* filter fade */
+.cell { transition: opacity 0.4s ease; }
+.cell.hidden { opacity: 0; pointer-events: none; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: repeat(2,1fr); padding-top: 4.5rem; }
+  .cell.wide { grid-column: span 1; }
+  .cell.tall::after { min-height: 360px; }
+  header, footer { padding: 1.1rem 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<header>
+  <a class="wordmark" href="#" id="logo">Hornman</a>
+  <ul class="nav">
+    <li><a href="mailto:hello@hornmanphotography.com" id="contact-nav">Contact</a></li>
+  </ul>
+</header>
+
+<div class="grid" id="grid">
+
+  <div class="cell tall" data-cat="events" onclick="openLb(this)">
+    <div class="cell-cover"></div>
+    <div class="cell-img" style="background-image: url('event-1.jpg')"></div>
+    <div class="cell-label"><span>Events</span></div>
+    <div class="cell-num">01</div>
+  </div>
+
+  <div class="cell" data-cat="events" onclick="openLb(this)">
+    <div class="cell-cover"></div>
+    <div class="cell-img" style="background-image: url('event-2.jpg')"></div>
+    <div class="cell-label"><span>Events</span></div>
+    <div class="cell-num">02</div>
+  </div>
+
+  <div class="cell" data-cat="product" onclick="openLb(this)">
+    <div class="cell-cover"></div>
+    <div class="cell-img" style="background-image: url('product-1.jpg')"></div>
+    <div class="cell-label"><span>Product</span></div>
+    <div class="cell-num">03</div>
+  </div>
+
+  <div class="cell wide" data-cat="events" onclick="openLb(this)">
+    <div class="cell-cover"></div>
+    <div class="cell-img" style="background-image: url('event-3.jpg')"></div>
+    <div class="cell-label"><span>Events</span></div>
+    <div class="cell-num">04</div>
+  </div>
+
+  <div class="cell" data-cat="product" onclick="openLb(this)">
+    <div class="cell-cover"></div>
+    <div class="cell-img" style="background-image: url('product-2.jpg')"></div>
+    <div class="cell-label"><span>Product</span></div>
+    <div class="cell-num">05</div>
+  </div>
+
+  <div class="cell" data-cat="events" onclick="openLb(this)">
+    <div class="cell-cover"></div>
+    <div class="cell-img" style="background-image: url('event-4.jpg')"></div>
+    <div class="cell-label"><span>Events</span></div>
+    <div class="cell-num">06</div>
+  </div>
+
+  <div class="cell" data-cat="product" onclick="openLb(this)">
+    <div class="cell-cover"></div>
+    <div class="cell-img" style="background-image: url('product-3.jpg')"></div>
+    <div class="cell-label"><span>Product</span></div>
+    <div class="cell-num">07</div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-dim">© 2025</span>
+  <a class="contact-link" href="mailto:hello@hornmanphotography.com">hello@hornmanphotography.com</a>
+  <span class="footer-dim">Lisbon</span>
+</footer>
+
+<div id="lb" onclick="closeLb()">
+  <span id="lb-close">Close</span>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<script>
+// cursor
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a, .cell, button').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+});
+
+// staggered reveal on load
+const cells = document.querySelectorAll('.cell');
+cells.forEach((cell, i) => {
+  setTimeout(() => cell.classList.add('visible'), 120 + i * 90);
+});
+
+
+document.getElementById('logo').addEventListener('click', e => {
+  e.preventDefault();
+  document.querySelectorAll('.nav a').forEach(x => x.classList.remove('active'));
+  cells.forEach(c => c.classList.remove('hidden'));
+});
+
+// lightbox
+function openLb(cell) {
+  const bg = cell.querySelector('.cell-img').style.backgroundImage;
+  if (!bg) return;
+  const url = bg.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
+  const lb = document.getElementById('lb');
+  const img = document.getElementById('lb-img');
+  img.src = url;
+  lb.classList.add('open');
+  requestAnimationFrame(() => requestAnimationFrame(() => lb.classList.add('ready')));
+}
+
+function closeLb() {
+  const lb = document.getElementById('lb');
+  lb.classList.remove('ready');
+  setTimeout(() => {
+    lb.classList.remove('open');
+    document.getElementById('lb-img').src = '';
+  }, 400);
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+</script>
+</body>
+</html>
