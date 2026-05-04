@@ -298,16 +298,7 @@ function closeLb() {
   }, 400);
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
-
-document.querySelectorAll('.cell-img').forEach(el => {
-  const bg = el.style.backgroundImage;
-  if (!bg) return;
-  const url = bg.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
-  const img = new Image();
-  img.src = url;
-});
-  
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });  
 </script>
 </body>
 </html>
