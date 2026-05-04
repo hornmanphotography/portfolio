@@ -284,9 +284,9 @@ function openLb(cell) {
   const url = bg.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
   const lb = document.getElementById('lb');
   const img = document.getElementById('lb-img');
-  img.src = url;
   lb.classList.add('open');
-  requestAnimationFrame(() => requestAnimationFrame(() => lb.classList.add('ready')));
+  img.onload = () => lb.classList.add('ready');
+  img.src = url;
 }
 
 function closeLb() {
