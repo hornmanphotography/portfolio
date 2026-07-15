@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Hornman Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --bg: #0e0d0b; --fg: #f0ede8; --dim: #555450; }
+html, body { height: 100%; background: var(--bg); }
+body { color: var(--fg); font-family: Helvetica, Arial, sans-serif; font-weight: 300; }
+
+#cursor {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--fg); position: fixed; pointer-events: none;
+  z-index: 9999; transform: translate(-50%,-50%);
+  transition: width 0.3s cubic-bezier(0.25,0,0,1), height 0.3s cubic-bezier(0.25,0,0,1);
+  mix-blend-mode: difference;
+}
+body.hovering #cursor { width: 48px; height: 48px; }
+
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.75rem 2.5rem; mix-blend-mode: difference;
+}
+.wordmark {
+  font-family: 'EB Garamond', serif; font-size: 1rem; letter-spacing: 0.04em;
+  color: var(--fg); text-decoration: none;
+}
+.nav { display: flex; gap: 2.25rem; list-style: none; }
+.nav a {
+  font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--fg); text-decoration: none; opacity: 0.45;
+  transition: opacity 0.2s; cursor: none;
+}
+.nav a:hover, .nav a.active { opacity: 1; }
+
+main {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 8rem 2.5rem 5rem;
+  max-width: 640px;
+}
+
+.content { opacity: 0; animation: fadeUp 0.9s 0.2s ease forwards; }
+
+.hi {
+  font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--dim); margin-bottom: 2rem;
+}
+
+.name {
+  font-family: 'EB Garamond', serif; font-size: clamp(2.2rem, 6vw, 3.5rem);
+  font-weight: 400; line-height: 1.15; margin-bottom: 2.5rem;
+}
+
+.name em { font-style: italic; opacity: 0.4; }
+
+.body {
+  font-size: 0.82rem; line-height: 1.95; color: rgba(240,237,232,0.55);
+  margin-bottom: 3.5rem; max-width: 420px;
+}
+
+.body p + p { margin-top: 1.25rem; }
+
+.divider {
+  width: 2rem; height: 1px; background: var(--dim);
+  margin-bottom: 3rem; opacity: 0.5;
+}
+
+.contact-block { display: flex; flex-direction: column; gap: 1rem; }
+
+.contact-row {
+  display: flex; align-items: baseline; gap: 1.5rem;
+}
+
+.contact-label {
+  font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--dim); width: 4rem; flex-shrink: 0;
+}
+
+.contact-value {
+  font-family: 'EB Garamond', serif; font-size: 1rem;
+  color: var(--fg); text-decoration: none; position: relative;
+}
+
+a.contact-value::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+  height: 1px; background: var(--fg); opacity: 0.3;
+  transform: scaleX(0); transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.77,0,0.18,1);
+}
+a.contact-value:hover::after { transform: scaleX(1); transform-origin: left; }
+
+footer {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.25rem 2.5rem; border-top: 1px solid rgba(240,237,232,0.06);
+  mix-blend-mode: difference;
+}
+.footer-dim { font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(240,237,232,0.25); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (hover: none) { #cursor { display: none; } }
+@media (max-width: 640px) {
+  header, footer { padding: 1.1rem 1.25rem; }
+  main { padding: 7rem 1.25rem 5rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<header>
+  <a class="wordmark" href="index.html">Hornman</a>
+  <ul class="nav">
+    <li><a href="index.html">Work</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+  </ul>
+</header>
+
+<main>
+  <div class="content">
+    <p class="hi">About</p>
+    <h1 class="name">Hey, I'm Jamie.<br><em> </h1>
+    <div class="body">
+      <p>I shoot small scale events around the Cascais and Lisbon area — parties, get-togethers, live music, whatever's worth remembering.</p>
+      <p>I'm actively building my portfolio so I keep my prices accessible. If you have an event coming up and want it documented properly, get in touch.</p>
+    </div>
+    <div class="divider"></div>
+    <div class="contact-block">
+      <div class="contact-row">
+        <span class="contact-label">Email</span>
+        <a class="contact-value" href="mailto:hello@hornmanphotography.com">hello@hornmanphotography.com</a>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">Phone</span>
+        <span class="contact-value">+351 919 185 693</span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">Based</span>
+        <span class="contact-value">Cascais / Lisbon</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span class="footer-dim">Hornman Photography</span>
+  <span class="footer-dim">© 2025</span>
+</footer>
+
+<script>
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+});
+</script>
+</body>
+</html>
